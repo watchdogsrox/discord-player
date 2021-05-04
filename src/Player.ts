@@ -798,6 +798,29 @@ export class Player extends EventEmitter {
         return queue;
     }
 
+/**
+     * Move track to a new position.
+     * @param {Discord.Message, trackSource, trackDestination} message
+     * @returns {Queue}
+     */
+    move (message, trackSource, trackDestination) {
+        // Get guild queue
+        const queue = this.queues.get(message.guild.id)
+        if (!queue) return this.emit('error', 'NotPlaying', message)
+        if ((destination < 0 || source < 0) || (source > queue.tracks.length) ) return message.reply(`Please choose the correct track!`)
+        destination = destination > queue.tracks.length ? queue.tracks.length - 1 : destination;
+
+        // (except the first track)
+        const currentTrack = queue.tracks.shift()
+        const temp = queue.tracks[newPosition];
+        queue.tracks[newPosition] = queue.tracks[destination]
+        queue.tracks[destination] = temp;
+
+        queue.tracks.unshift(currentTrack)
+        // Return the queue
+        return queue
+    }
+
     /**
      * Removes specified track
      * @param {DiscordMessage} message The message object
